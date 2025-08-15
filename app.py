@@ -10,8 +10,7 @@ st.image(logo_url, width=150)
 st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>Anand Ice Cream Menu</h1>", unsafe_allow_html=True)
 
 # --- Load Data ---
-categories_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQJ5L6O5vVyXrWx7iVf_dfM7dWV-qx02tN7D4VFZGoZq6iPOXj1RVI9JlhV9VEKnDwoqwhQdde2gCB/pub?gid=0&single=true&output=csv
-"
+categories_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQJ5L6O5vVyXrWx7iVf_dfM7dWV-qx02tN7D4VFZGoZq6iPOXj1RVI9JlhV9VEKnDwoqwhQdde2gCB/pub?gid=0&single=true&output=csv"
 items_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQJ5L6O5vVyXrWx7iVf_dfM7dWV-qx02tN7D4VFZGoZq6iPOXj1RVI9JlhV9VEKnDwoqwhQdde2gCB/pub?gid=1538241295&single=true&output=csv"
 
 categories_df = pd.read_csv(categories_url)
