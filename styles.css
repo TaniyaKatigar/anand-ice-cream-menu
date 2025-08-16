@@ -1,0 +1,35 @@
+const sheetURL = 'https://script.google.com/macros/s/AKfycbyChyeV_ZsinxUOGmf67GGvkTCFvG6spVYFVSwcjNYSEyGZWs0hLLS3zMVbprRHjSDL/exec';
+
+fetch(sheetURL)
+  .then(res => res.json())
+  .then(data => renderCategories(data));
+
+function renderCategories(data) {
+  const grid = document.getElementById('menu-grid');
+  data.forEach(category => {
+    const div = document.createElement('div');
+    div.className = 'menu-item';
+    div.innerHTML = `
+      <img src="${category.imageUrl}" alt="${category.name}" />
+      <h3>${category.name}</h3>
+    `;
+    div.onclick = () => showPopup(category.name, category.items);
+    grid.appendChild(div);
+  });
+}
+
+function showPopup(name, items) {
+  document.getElementById('popup-title').innerText = name;
+  const list = document.getElementById('popup-items');
+  list.innerHTML = '';
+  items.forEach(item => {
+    const li = document.createElement('li');
+    li.innerText = `${item.name} — ₹${item.price}`;
+    list.appendChild(li);
+  });
+  document.getElementById('popup').style.display = 'flex';
+}
+
+function closePopup() {
+  document.getElementById('popup').style.display = 'none';
+}
