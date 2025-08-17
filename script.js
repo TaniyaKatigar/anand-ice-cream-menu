@@ -42,3 +42,4 @@ function showPopup(name, items) {
 function closePopup() {
   document.getElementById('popup').style.display = 'none';
 }
+
