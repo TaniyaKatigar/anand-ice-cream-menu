@@ -140,43 +140,45 @@ if (categoriesData.length === 0) {
     }
 
     function loadItems(categoryName) {
-      currentCategory = categoryName;
-      simulateLoading(() => {
-        document.getElementById('categoriesSection').style.display = 'none';
-        document.getElementById('itemsSection').classList.remove('hidden');
-        document.getElementById('categoryTitle').textContent = categoryName;
-        history.pushState({ page: 'items', category: categoryName }, '', '');
+  currentCategory = categoryName;
+  simulateLoading(() => {
+    document.getElementById('categoriesSection').style.display = 'none';
+    document.getElementById('itemsSection').classList.remove('hidden');
+    document.getElementById('categoryTitle').textContent = categoryName;
+    history.pushState({ page: 'items', category: categoryName }, '', '');
 
-        const itemsGrid = document.getElementById('itemsGrid');
-itemsGrid.innerHTML = '';
-const noItemMsg = document.getElementById('noItemsMessage');
-if (items.length === 0) {
-  noItemMsg.classList.remove('hidden');
-} else {
-  noItemMsg.classList.add('hidden');
+    const itemsGrid = document.getElementById('itemsGrid');
+    itemsGrid.innerHTML = '';
+
+    const items = itemsData[categoryName] || []; // ✅ define items first
+
+    const noItemMsg = document.getElementById('noItemsMessage');
+    if (items.length === 0) {
+      noItemMsg.classList.remove('hidden');
+    } else {
+      noItemMsg.classList.add('hidden');
+    }
+
+    items.forEach((item, index) => {
+      const itemCard = document.createElement('div');
+      itemCard.className = 'item-card bg-white rounded-xl p-6 shadow-md slide-in';
+      itemCard.style.animationDelay = `${index * 0.1}s`;
+
+      itemCard.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">${item.name}</h4>
+            <div class="text-right">
+              <span class="text-2xl font-bold text-purple-600">${item.price}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      itemsGrid.appendChild(itemCard);
+    });
+  });
 }
 
-const items = itemsData[categoryName] || [];
-
-        items.forEach((item, index) => {
-          const itemCard = document.createElement('div');
-          itemCard.className = 'item-card bg-white rounded-xl p-6 shadow-md slide-in';
-          itemCard.style.animationDelay = `${index * 0.1}s`;
-
-          itemCard.innerHTML = `
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <h4 class="text-lg font-semibold text-gray-800 mb-2">${item.name}</h4>
-                <div class="text-right">
-                  <span class="text-2xl font-bold text-purple-600">${item.price}</span>
-                </div>
-              </div>
-            </div>
-          `;
-          itemsGrid.appendChild(itemCard);
-        });
-      });
-    }
 
     function showAllCategories() {
       document.getElementById('itemsSection').classList.add('hidden');
