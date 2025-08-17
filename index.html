@@ -25,7 +25,7 @@
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     }
 
-    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .gradient-bg { background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%); }
     .ice-cream-bg { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
   </style>
 </head>
@@ -34,11 +34,11 @@
   <!-- Header -->
   <header class="gradient-bg text-white py-8 px-4 shadow-2xl">
     <div class="max-w-6xl mx-auto text-center">
-      <img src="assets/logo.png" alt="Anand Ice Cream Logo" class="mx-auto w-24 h-24 mb-4 float-animation" />
+      <img src="assets/logo.png" alt="Anand Ice Cream Logo" class="mx-auto w-32 h-24 mb-4 float-animation" />
       <p class="text-xl opacity-90">Delicious frozen treats made with love</p>
       <div class="mt-4 flex justify-center items-center space-x-2">
-        <img src="assets/loader.gif" alt="Loading..." class="w-15 h-15" />
-        <span class="ml-3 text-sm opacity-75">Fetching fresh menu...</span>
+        <center><img src="assets/loader.gif" alt="Loading..." class="w-9 h-9" />
+        <span class="ml-3 text-sm opacity-75">Digital Menu</span></center>
       </div>
     </div>
   </header>
@@ -72,96 +72,99 @@
   </div>
 
   <script>
-    const sheetURL = 'https://script.google.com/macros/s/AKfycbyChyeV_ZsinxUOGmf67GGvkTCFvG6spVYFVSwcjNYSEyGZWs0hLLS3zMVbprRHjSDL/exec'; // Replace with your actual URL
-    let categoriesData = [];
-    let itemsData = {};
-    let currentCategory = null;
+  const sheetURL = 'https://script.google.com/macros/s/AKfycbyChyeV_ZsinxUOGmf67GGvkTCFvG6spVYFVSwcjNYSEyGZWs0hLLS3zMVbprRHjSDL/exec';
+  let categoriesData = [];
+  let itemsData = {};
+  let currentCategory = null;
 
-    async function fetchMenuData() {
-      try {
-        const res = await fetch(sheetURL);
-        const data = await res.json();
-        categoriesData = data.categories;
-        itemsData = data.items;
-        loadCategories();
-      } catch (error) {
-        console.error("Failed to fetch menu data:", error);
-      }
-    }
-
-    function simulateLoading(callback, delay = 1000) {
+  async function fetchMenuData() {
+    try {
       document.getElementById('loadingOverlay').classList.remove('hidden');
-      setTimeout(() => {
-        document.getElementById('loadingOverlay').classList.add('hidden');
-        callback();
-      }, delay);
+      const res = await fetch(sheetURL);
+      const data = await res.json();
+      categoriesData = data.categories;
+      itemsData = data.items;
+      loadCategories();
+    } catch (error) {
+      console.error("Failed to fetch menu data:", error);
     }
+  }
 
-    function loadCategories() {
-      const grid = document.getElementById('categoriesGrid');
-      grid.innerHTML = '';
+  function loadCategories() {
+    const grid = document.getElementById('categoriesGrid');
+    grid.innerHTML = '';
 
-      categoriesData.forEach((category, index) => {
-        const card = document.createElement('div');
-        card.className = 'category-card bg-white rounded-2xl p-6 shadow-lg cursor-pointer slide-in';
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.onclick = () => loadItems(category.name);
+    categoriesData.forEach((category, index) => {
+      const card = document.createElement('div');
+      card.className = 'category-card bg-white rounded-2xl p-6 shadow-lg cursor-pointer slide-in';
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.onclick = () => loadItems(category.name);
 
-        card.innerHTML = `
-          <div class="text-center">
-            <img src="${category.image}" alt="${category.name}" class="w-full h-32 object-cover rounded-xl mb-4" />
-            <h3 class="text-xl font-semibold text-gray-800">${category.name}</h3>
-            <div class="mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-full text-sm font-medium">
-              View Menu
+      card.innerHTML = `
+        <div class="text-center">
+          <img src="${category.image}" alt="${category.name}" class="w-full h-32 object-cover rounded-xl mb-4" />
+          <h3 class="text-xl font-semibold text-gray-800">${category.name}</h3>
+          <div class="mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-full text-sm font-medium">
+            View Menu
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Hide loader only after categories are rendered
+    document.getElementById('loadingOverlay').classList.add('hidden');
+  }
+
+  function simulateLoading(callback, delay = 1000) {
+    document.getElementById('loadingOverlay').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('loadingOverlay').classList.add('hidden');
+      callback();
+    }, delay);
+  }
+
+  function loadItems(categoryName) {
+    currentCategory = categoryName;
+    simulateLoading(() => {
+      document.getElementById('categoriesSection').style.display = 'none';
+      document.getElementById('itemsSection').classList.remove('hidden');
+      document.getElementById('categoryTitle').textContent = categoryName;
+
+      const itemsGrid = document.getElementById('itemsGrid');
+      itemsGrid.innerHTML = '';
+      const items = itemsData[categoryName] || [];
+
+      items.forEach((item, index) => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'item-card bg-white rounded-xl p-6 shadow-md slide-in';
+        itemCard.style.animationDelay = `${index * 0.1}s`;
+
+        itemCard.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <h4 class="text-lg font-semibold text-gray-800 mb-2">${item.name}</h4>
+              <div class="text-right">
+                <span class="text-2xl font-bold text-purple-600">${item.price}</span>
+              </div>
             </div>
           </div>
         `;
-        grid.appendChild(card);
+        itemsGrid.appendChild(itemCard);
       });
-    }
-
-    function loadItems(categoryName) {
-      currentCategory = categoryName;
-      simulateLoading(() => {
-        document.getElementById('categoriesSection').style.display = 'none';
-        document.getElementById('itemsSection').classList.remove('hidden');
-        document.getElementById('categoryTitle').textContent = categoryName;
-
-        const itemsGrid = document.getElementById('itemsGrid');
-        itemsGrid.innerHTML = '';
-        const items = itemsData[categoryName] || [];
-
-        items.forEach((item, index) => {
-          const itemCard = document.createElement('div');
-          itemCard.className = 'item-card bg-white rounded-xl p-6 shadow-md slide-in';
-          itemCard.style.animationDelay = `${index * 0.1}s`;
-
-          itemCard.innerHTML = `
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <h4 class="text-lg font-semibold text-gray-800 mb-2">${item.name}</h4>
-                <div class="text-right">
-                  <span class="text-2xl font-bold text-purple-600">${item.price}</span>
-                </div>
-              </div>
-            </div>
-          `;
-          itemsGrid.appendChild(itemCard);
-        });
-      });
-    }
-
-    function showAllCategories() {
-      document.getElementById('itemsSection').classList.add('hidden');
-      document.getElementById('categoriesSection').style.display = 'block';
-      currentCategory = null;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      simulateLoading(() => {
-        fetchMenuData();
-      }, 1500);
     });
-  </script>
+  }
+
+  function showAllCategories() {
+    document.getElementById('itemsSection').classList.add('hidden');
+    document.getElementById('categoriesSection').style.display = 'block';
+    currentCategory = null;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchMenuData();
+  });
+</script>
+
 </body>
 </html>
