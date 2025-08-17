@@ -1,11 +1,20 @@
 const sheetURL = 'https://script.google.com/macros/s/AKfycbyChyeV_ZsinxUOGmf67GGvkTCFvG6spVYFVSwcjNYSEyGZWs0hLLS3zMVbprRHjSDL/exec';
 
+const loader = document.getElementById('loader');
+const grid = document.getElementById('menu-grid');
+
 fetch(sheetURL)
   .then(res => res.json())
-  .then(data => renderCategories(data));
+  .then(data => {
+    loader.style.display = 'none';
+    renderCategories(data);
+  })
+  .catch(err => {
+    loader.innerHTML = '<p>Failed to load menu. Please try again later.</p>';
+    console.error(err);
+  });
 
 function renderCategories(data) {
-  const grid = document.getElementById('menu-grid');
   data.forEach(category => {
     const div = document.createElement('div');
     div.className = 'menu-item';
