@@ -4,6 +4,7 @@ body {
   background: linear-gradient(to bottom right, #fff0f5, #e0ffff);
   color: #333;
   animation: fadeIn 1s ease-in;
+  overflow-x: hidden;
 }
 
 @keyframes fadeIn {
@@ -41,20 +42,24 @@ header {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
   padding: 30px;
 }
 
 .menu-item {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background: linear-gradient(to bottom right, #fffaf0, #ffe4e1);
+  border-radius: 50%;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
   text-align: center;
-  padding: 15px;
+  padding: 20px;
   cursor: pointer;
   transition: transform 0.3s ease;
-  animation: slideUp 0.6s ease forwards;
+  animation: bounceIn 0.6s ease forwards;
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+  position: relative;
 }
 
 .menu-item:hover {
@@ -63,14 +68,28 @@ header {
 
 .menu-item img {
   width: 100%;
-  height: 150px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 50%;
 }
 
 .menu-item h3 {
-  margin-top: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  font-size: 1em;
   color: #ff69b4;
+  background: rgba(255,255,255,0.7);
+  padding: 5px;
+  border-radius: 0 0 10px 10px;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
 }
 
 .popup {
@@ -85,27 +104,43 @@ header {
 }
 
 .popup-content {
-  background: #fff;
+  background: #fffefc;
   padding: 30px;
-  border-radius: 12px;
-  text-align: center;
+  border-radius: 16px;
+  text-align: left;
   width: 90%;
   max-width: 400px;
-  animation: popIn 0.5s ease;
+  animation: slideUp 0.5s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .close {
   position: absolute;
-  top: 20px;
-  right: 30px;
+  top: 15px;
+  right: 20px;
   font-size: 24px;
   cursor: pointer;
 }
 
 #popup-items li {
-  margin: 10px 0;
-  font-size: 16px;
+  margin: 12px 0;
+  font-size: 17px;
   color: #444;
+  list-style: none;
+  padding-left: 24px;
+  position: relative;
+}
+
+#popup-items li::before {
+  content: "🍧";
+  position: absolute;
+  left: 0;
 }
 
 footer {
@@ -115,8 +150,24 @@ footer {
   font-size: 14px;
 }
 
-/* Micro animation */
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.floating-gif {
+  position: fixed;
+  width: 60px;
+  animation: float 3s ease-in-out infinite alternate;
+  z-index: 998;
+}
+
+.cone {
+  bottom: 20px;
+  left: 20px;
+}
+
+.stick {
+  bottom: 20px;
+  right: 20px;
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
 }
