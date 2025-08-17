@@ -230,10 +230,11 @@
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
-            simulateLoading(() => {
-                loadCategories();
-            }, 1500);
-        });
+  simulateLoading(() => {
+    fetchMenuData(); // This will fetch data and then call loadCategories()
+  }, 1500);
+});
+
 
         // Add click handlers for cart buttons
         document.addEventListener('click', (e) => {
