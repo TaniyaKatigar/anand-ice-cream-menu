@@ -82,22 +82,31 @@
   <script>
     const sheetURL = 'https://script.google.com/macros/s/AKfycbyChyeV_ZsinxUOGmf67GGvkTCFvG6spVYFVSwcjNYSEyGZWs0hLLS3zMVbprRHjSDL/exec?action=getWebData';
 
-    let itemsData = {};
-    let currentCategory = null;
+    let categoriesData = [];
+let itemsData = {};
 
-    async function fetchMenuData() {
-      try {
-        document.getElementById('loadingOverlay').classList.remove('hidden');
-        const res = await fetch(sheetURL);
-        const data = await res.json();
-        categoriesData = data.categories;
-        itemsData = data.items;
-        loadCategories();
-        history.replaceState({ page: 'categories' }, '', '');
-      } catch (error) {
-        console.error("Failed to fetch menu data:", error);
-      }
-    }
+async function fetchMenuData() {
+  try {
+    document.getElementById('loadingOverlay').classList.remove('hidden');
+    const res = await fetch(sheetURL);
+    const data = await res.json();
+    categoriesData = data.categories;
+
+    // ✅ Build itemsData using CategoryID
+    itemsData = {};
+    data.items.forEach(item => {
+      const catId = item.CategoryID;
+      if (!itemsData[catId]) itemsData[catId] = [];
+      itemsData[catId].push({ name: item.Name, price: item.Price });
+    });
+
+    loadCategories();
+    history.replaceState({ page: 'categories' }, '', '');
+  } catch (error) {
+    console.error("Failed to fetch menu data:", error);
+  }
+}
+
 
     function loadCategories() {
       const grid = document.getElementById('categoriesGrid');
@@ -113,7 +122,7 @@ if (categoriesData.length === 0) {
         const card = document.createElement('div');
         card.className = 'category-card bg-white rounded-2xl p-6 shadow-lg cursor-pointer slide-in';
         card.style.animationDelay = `${index * 0.1}s`;
-        card.onclick = () => loadItems(category.name);
+        card.onclick = () => loadItems(category.id, category.name);
 
         card.innerHTML = `
   <div class="text-center">
@@ -139,18 +148,18 @@ if (categoriesData.length === 0) {
       }, delay);
     }
 
-    function loadItems(categoryName) {
-  currentCategory = categoryName;
+    function loadItems(categoryId, categoryName) {
+  currentCategory = categoryId;
   simulateLoading(() => {
     document.getElementById('categoriesSection').style.display = 'none';
     document.getElementById('itemsSection').classList.remove('hidden');
     document.getElementById('categoryTitle').textContent = categoryName;
-    history.pushState({ page: 'items', category: categoryName }, '', '');
+    history.pushState({ page: 'items', category: categoryId }, '', '');
 
     const itemsGrid = document.getElementById('itemsGrid');
     itemsGrid.innerHTML = '';
 
-    const items = itemsData[categoryName] || []; // ✅ define items first
+    const items = itemsData[categoryId] || [];
 
     const noItemMsg = document.getElementById('noItemsMessage');
     if (items.length === 0) {
@@ -180,6 +189,7 @@ if (categoriesData.length === 0) {
 }
 
 
+
     function showAllCategories() {
       document.getElementById('itemsSection').classList.add('hidden');
       document.getElementById('categoriesSection').style.display = 'block';
@@ -192,8 +202,9 @@ if (categoriesData.length === 0) {
 
       if (state && state.page === 'categories') {
         showAllCategories();
-      } else if (state && state.page === 'items') {
-        loadItems(state.category);
+      else if (state && state.page === 'items') {
+      const category = categoriesData.find(cat => cat.id === state.category);
+      if (category) loadItems(category.id, category.name);
       } else {
         // Optional: Prevent app from closing
         const stay = confirm("Do you want to exit the menu?");
