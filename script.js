@@ -19,8 +19,9 @@ function renderCategories(data) {
     const div = document.createElement('div');
     div.className = 'menu-item';
     div.innerHTML = `
-      <img src="${category.imageUrl}" alt="${category.name}" />
-      <h3>${category.name}</h3>
+      <div class="circle-bg"></div>
+      <img src="${category.imageUrl}" alt="${category.name}" class="category-img" />
+      <div class="label">${category.name}</div>
     `;
     div.onclick = () => showPopup(category.name, category.items);
     grid.appendChild(div);
