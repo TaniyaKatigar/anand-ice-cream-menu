@@ -148,15 +148,15 @@ if (categoriesData.length === 0) {
         history.pushState({ page: 'items', category: categoryName }, '', '');
 
         const itemsGrid = document.getElementById('itemsGrid');
-        itemsGrid.innerHTML = '';
-        const noItemMsg = document.getElementById('noItemsMessage');
+itemsGrid.innerHTML = '';
+const noItemMsg = document.getElementById('noItemsMessage');
 if (items.length === 0) {
   noItemMsg.classList.remove('hidden');
 } else {
   noItemMsg.classList.add('hidden');
 }
 
-        const items = itemsData[categoryName] || [];
+const items = itemsData[categoryName] || [];
 
         items.forEach((item, index) => {
           const itemCard = document.createElement('div');
