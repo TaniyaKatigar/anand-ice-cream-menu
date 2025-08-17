@@ -43,47 +43,54 @@ header {
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  padding: 30px;
+  gap: 30px;
+  padding: 40px;
+  justify-items: center;
 }
 
 .menu-item {
-  background: linear-gradient(to bottom right, #fffaf0, #ffe4e1);
-  border-radius: 50%;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  text-align: center;
-  padding: 20px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  animation: bounceIn 0.6s ease forwards;
+  position: relative;
   width: 180px;
   height: 180px;
-  overflow: hidden;
-  position: relative;
+  animation: bounceIn 0.6s ease forwards;
+  cursor: pointer;
 }
 
-.menu-item:hover {
-  transform: scale(1.05);
+.menu-item .circle-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('assets/back_circle.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  z-index: 1;
 }
 
-.menu-item img {
+.menu-item img.category-img {
+  position: absolute;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  z-index: 2;
 }
 
-.menu-item h3 {
+.menu-item .label {
   position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-  margin: 0;
-  font-size: 1em;
-  color: #ff69b4;
-  background: rgba(255,255,255,0.7);
-  padding: 5px;
-  border-radius: 0 0 10px 10px;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: url('assets/label_bg.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: #4b0082;
+  font-weight: bold;
+  z-index: 3;
+  white-space: nowrap;
 }
 
 @keyframes bounceIn {
@@ -148,26 +155,4 @@ footer {
   padding: 15px;
   background-color: #ffe4e1;
   font-size: 14px;
-}
-
-.floating-gif {
-  position: fixed;
-  width: 60px;
-  animation: float 3s ease-in-out infinite alternate;
-  z-index: 998;
-}
-
-.cone {
-  bottom: 20px;
-  left: 20px;
-}
-
-.stick {
-  bottom: 20px;
-  right: 20px;
-}
-
-@keyframes float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-10px); }
 }
