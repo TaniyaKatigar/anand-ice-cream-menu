@@ -92,13 +92,12 @@ async function fetchMenuData() {
     const data = await res.json();
     categoriesData = data.categories;
 
-    // ✅ Build itemsData using CategoryID
-    itemsData = {};
-    data.items.forEach(item => {
-      const catId = item.CategoryID;
-      if (!itemsData[catId]) itemsData[catId] = [];
-      itemsData[catId].push({ name: item.Name, price: item.Price });
-    });
+// ✅ Build itemsData using category.id
+itemsData = {};
+categoriesData.forEach(cat => {
+  itemsData[cat.id] = data.items[cat.name] || [];
+});
+
 
     loadCategories();
     history.replaceState({ page: 'categories' }, '', '');
