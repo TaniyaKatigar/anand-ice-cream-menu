@@ -197,28 +197,32 @@ if (categoriesData.length === 0) {
     }
 
     window.addEventListener('popstate', function (event) {
-      const state = event.state;
+  const state = event.state;
 
-      if (state && state.page === 'categories') {
-        showAllCategories();
-      }
-      else if (state && state.page === 'items') {
-      const category = categoriesData.find(cat => cat.id === state.category);
-      if (category) loadItems(category.id, category.name);
-      } else {
-        // Optional: Prevent app from closing
-        const stay = confirm("Do you want to exit the menu?");
-        if (!stay) {
-          window.history.forward(); // Stay on current page
-        } else {
-          history.pushState({ page: 'categories' }, '', '');
-        }
-      }
-    });
+  if (state && state.page === 'categories') {
+    showAllCategories();
+  } 
+  else if (state && state.page === 'items') {
+    const category = categoriesData.find(cat => cat.id === state.category);
+    if (category) {
+      loadItems(category.id, category.name);
+    }
+  } 
+  else {
+    // Optional: Prevent app from closing
+    const stay = confirm("Do you want to exit the menu?");
+    if (!stay) {
+      window.history.forward(); // Stay on current page
+    } else {
+      history.pushState({ page: 'categories' }, '', '');
+    }
+  }
+});
 
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchMenuData();
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  fetchMenuData();
+});
+
   </script>
 
 </body>
