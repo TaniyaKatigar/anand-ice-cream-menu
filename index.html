@@ -202,6 +202,7 @@ if (categoriesData.length === 0) {
 
       if (state && state.page === 'categories') {
         showAllCategories();
+      }
       else if (state && state.page === 'items') {
       const category = categoriesData.find(cat => cat.id === state.category);
       if (category) loadItems(category.id, category.name);
